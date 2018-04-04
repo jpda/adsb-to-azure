@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ADSB.Interpreter.Observers
 {
@@ -31,6 +32,12 @@ namespace ADSB.Interpreter.Observers
                 _cache.Clear();
                 _windowStart = DateTime.UtcNow;
             }
+        }
+
+        public new Task OnNextAsync(adsb.Message value)
+        {
+            OnNext(value);
+            return Task.CompletedTask;
         }
     }
 }

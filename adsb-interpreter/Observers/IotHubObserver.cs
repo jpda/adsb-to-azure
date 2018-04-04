@@ -28,6 +28,7 @@ namespace ADSB.Interpreter.Observers
         {
             var val = JsonConvert.SerializeObject(value);
             var msg = new Message(Encoding.UTF8.GetBytes(val));
+            await _client.OpenAsync();
             await _client.SendEventAsync(msg);
         }
 

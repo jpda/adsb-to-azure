@@ -37,7 +37,7 @@ namespace ADSB.Interpreter
 
             var tc = new TelemetryClient();
             var logger = new AiLog(tc);
-            var iotClient = DeviceClient.CreateFromConnectionString(deviceConnectionString, TransportType.Mqtt);
+            var iotClient = DeviceClient.CreateFromConnectionString(deviceConnectionString, TransportType.Amqp);
             var iotOb = new IotHubObserver(iotClient, logger);
             var consoleOb = new StatsObserver();
             var c = new Connector(ip, port, logger, iotOb, consoleOb);
