@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace ADSB.Interpreter.Adsb
 {
     public class Message
     {
+        [JsonIgnore]
         public string RawMessage { get; set; }
+        [JsonIgnore]
         public string[] RawMessageSplit { get; set; }
         public virtual string MessageType { get; set; }
         public string TransmissionType { get; set; }
@@ -90,114 +93,5 @@ namespace ADSB.Interpreter.Adsb
             }
             return default(T);
         }
-    }
-
-    public class IdentificationAndCategoryMessage : Message
-    {
-        public override string MessageType { get => 1.ToString(); }
-        public override string Callsign { get; set; }
-
-        public IdentificationAndCategoryMessage(string data) : base(data)
-        {
-            Callsign = GetValue<string>(10);
-        }
-    }
-
-    public class SurfacePositionMessage : Message
-    {
-        public override string MessageType { get => 2.ToString(); }
-        public override decimal Altitude { get => base.Altitude; set => base.Altitude = value; }
-        public override decimal GroundSpeed { get => base.GroundSpeed; set => base.GroundSpeed = value; }
-        public override string Track { get => base.Track; set => base.Track = value; }
-        public override decimal Latitude { get => base.Latitude; set => base.Latitude = value; }
-        public override decimal Longitude { get => base.Longitude; set => base.Longitude = value; }
-        public override bool IsOnGround { get => base.IsOnGround; set => base.IsOnGround = value; }
-
-        public SurfacePositionMessage(string data) : base(data)
-        {
-            var decParse = new Func<string, decimal>(x => decimal.Parse(x));
-            Altitude = GetValue(11, decParse);
-            GroundSpeed = GetValue(12, decParse);
-            Track = GetValue<string>(13);
-            Latitude = GetValue(14, decParse);
-            Longitude = GetValue(15, decParse);
-            IsOnGround = GetValue(21, x => bool.Parse(x));
-        }
-    }
-
-    public class AirbornePositionMessage : Message
-    {
-        public override string MessageType { get => 3.ToString(); }
-        public override decimal Altitude { get => base.Altitude; set => base.Altitude = value; }
-        public override decimal Latitude { get => base.Latitude; set => base.Latitude = value; }
-        public override decimal Longitude { get => base.Longitude; set => base.Longitude = value; }
-        public override bool SquawkChange { get => base.SquawkChange; set => base.SquawkChange = value; }
-        public override bool Emergency { get => base.Emergency; set => base.Emergency = value; }
-        public override bool SPI { get => base.SPI; set => base.SPI = value; }
-        public override bool IsOnGround { get => base.IsOnGround; set => base.IsOnGround = value; }
-
-        public AirbornePositionMessage(string data) : base(data)
-        {
-
-        }
-    }
-
-    public class AirborneVelocityMessage : Message
-    {
-        public override string MessageType { get => 4.ToString(); }
-        public override decimal GroundSpeed { get => base.GroundSpeed; set => base.GroundSpeed = value; }
-        public override string Track { get => base.Track; set => base.Track = value; }
-        public override decimal VerticalRate { get => base.VerticalRate; set => base.VerticalRate = value; }
-
-        public AirborneVelocityMessage(string data) : base(data)
-        {
-
-        }
-    }
-
-    public class SurveillanceAltMessage : Message
-    {
-        public override string MessageType { get => 5.ToString(); }
-        public override decimal Altitude { get => base.Altitude; set => base.Altitude = value; }
-        public override bool SquawkChange { get => base.SquawkChange; set => base.SquawkChange = value; }
-        public override bool SPI { get => base.SPI; set => base.SPI = value; }
-        public override bool IsOnGround { get => base.IsOnGround; set => base.IsOnGround = value; }
-
-        public SurveillanceAltMessage(string data) : base(data)
-        {
-
-        }
-    }
-
-    public class SurveillanceIdMessage : Message
-    {
-        public override string MessageType { get => 6.ToString(); }
-        public override decimal Altitude { get => base.Altitude; set => base.Altitude = value; }
-        public override decimal GroundSpeed { get => base.GroundSpeed; set => base.GroundSpeed = value; }
-        public override string Squawk { get => base.Squawk; set => base.Squawk = value; }
-        public override bool SquawkChange { get => base.SquawkChange; set => base.SquawkChange = value; }
-        public override bool Emergency { get => base.Emergency; set => base.Emergency = value; }
-        public override bool SPI { get => base.SPI; set => base.SPI = value; }
-        public override bool IsOnGround { get => base.IsOnGround; set => base.IsOnGround = value; }
-
-        public SurveillanceIdMessage(string data) : base(data) { }
-    }
-
-    public class AirToAirMessage : Message
-    {
-        public override string MessageType { get => 7.ToString(); }
-        public override decimal Altitude { get => base.Altitude; set => base.Altitude = value; }
-        public override decimal GroundSpeed { get => base.GroundSpeed; set => base.GroundSpeed = value; }
-        public override bool IsOnGround { get => base.IsOnGround; set => base.IsOnGround = value; }
-
-        public AirToAirMessage(string data) : base(data) { }
-    }
-
-    public class AllCallReplyMessage : Message
-    {
-        public override string MessageType { get => 8.ToString(); }
-        public override bool IsOnGround { get => base.IsOnGround; set => base.IsOnGround = value; }
-
-        public AllCallReplyMessage(string data) : base(data) { }
     }
 }
